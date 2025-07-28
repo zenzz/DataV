@@ -1,6 +1,6 @@
 <template>
   <div class="dv-border-box-9" :ref="ref">
-    <svg class="dv-border-svg-container" :width="width" :height="height">
+    <svg class="dv-svg-container" :width="width" :height="height">
       <defs>
         <linearGradient :id="gradientId" x1="0%" y1="0%" x2="100%" y2="100%">
           <animate
@@ -105,15 +105,6 @@
         </mask>
       </defs>
 
-      <polygon :fill="backgroundColor" :points="`
-        15, 9 ${width * 0.1 + 1}, 9 ${width * 0.1 + 4}, 6 ${width * 0.52 + 2}, 6
-        ${width * 0.52 + 6}, 10 ${width * 0.58 - 7}, 10 ${width * 0.58 - 2}, 6
-        ${width * 0.9 + 2}, 6 ${width * 0.9 + 6}, 10 ${width - 10}, 10 ${width - 10}, ${height * 0.1 - 6}
-        ${width - 6}, ${height * 0.1 - 1} ${width - 6}, ${height * 0.8 + 1} ${width - 10}, ${height * 0.8 + 6}
-        ${width - 10}, ${height - 10} ${width * 0.92 + 7}, ${height - 10}  ${width * 0.92 + 2}, ${height - 6}
-        11, ${height - 6} 11, ${height * 0.15 - 2} 15, ${height * 0.15 - 7}
-      `" />
-
       <rect x="0" y="0" :width="width" :height="height" :fill="`url(#${gradientId})`" :mask="`url(#${maskId})`" />
     </svg>
 
@@ -125,7 +116,6 @@
 
 <script>
 import autoResize from '../../../mixin/autoResize'
-import { uuid } from '../../../util/index'
 
 import { deepMerge } from '@jiaminghi/charts/lib/util/index'
 
@@ -138,19 +128,15 @@ export default {
     color: {
       type: Array,
       default: () => ([])
-    },
-    backgroundColor: {
-      type: String,
-      default: 'transparent'
     }
   },
   data () {
-    const id = uuid()
+    const timestamp = Date.now()
     return {
       ref: 'border-box-9',
 
-      gradientId: `border-box-9-gradient-${id}`,
-      maskId: `border-box-9-mask-${id}`,
+      gradientId: `border-box-9-gradient-${timestamp}`,
+      maskId: `border-box-9-mask-${timestamp}`,
 
       defaultColor: ['#11eefd', '#0078d2'],
 

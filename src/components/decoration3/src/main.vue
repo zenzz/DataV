@@ -4,6 +4,7 @@
 
       <template
         v-for="(point, i) in points"
+        :key="i"
       >
         <rect
           :key="i"

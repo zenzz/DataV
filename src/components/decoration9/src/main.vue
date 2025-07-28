@@ -85,7 +85,6 @@
 
 <script>
 import autoResize from '../../../mixin/autoResize'
-import { uuid } from '../../../util/index'
 
 import { deepMerge } from '@jiaminghi/charts/lib/util/index'
 
@@ -107,11 +106,11 @@ export default {
     }
   },
   data () {
-    const id = uuid()
+    const timestamp = Date.now()
     return {
       ref: 'decoration-9',
 
-      polygonId: `decoration-9-polygon-${id}`,
+      polygonId: `decoration-9-polygon-${timestamp}`,
 
       svgWH: [100, 100],
 

@@ -1,10 +1,6 @@
 <template>
   <div class="dv-border-box-6" :ref="ref">
-    <svg class="dv-border-svg-container" :width="width" :height="height">
-      <polygon :fill="backgroundColor" :points="`
-        9, 7 ${width - 9}, 7 ${width - 9}, ${height - 7} 9, ${height - 7}
-      `" />
-
+    <svg class="dv-svg-container" :width="width" :height="height">
       <circle :fill="mergedColor[1]" cx="5" cy="5" r="2"/>
       <circle :fill="mergedColor[1]" :cx="width - 5" cy="5" r="2" />
       <circle :fill="mergedColor[1]" :cx="width - 5" :cy="height - 5" r="2" />
@@ -43,10 +39,6 @@ export default {
     color: {
       type: Array,
       default: () => ([])
-    },
-    backgroundColor: {
-      type: String,
-      default: 'transparent'
     }
   },
   data () {
@@ -86,14 +78,14 @@ export default {
   width: 100%;
   height: 100%;
 
-  .dv-border-svg-container {
+  .dv-svg-container {
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
 
-    & > polyline {
+    polyline {
       fill: none;
       stroke-width: 1;
     }

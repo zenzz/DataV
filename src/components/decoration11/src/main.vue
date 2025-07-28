@@ -72,6 +72,7 @@ export default {
     }
   },
   data () {
+    const timestamp = Date.now()
     return {
       ref: 'decoration-11',
 

@@ -9,7 +9,7 @@
       <div class="ranking-info">
         <div class="rank">No.{{ item.ranking }}</div>
         <div class="info-name" v-html="item.name" />
-        <div class="ranking-value">{{ mergedConfig.valueFormatter ? mergedConfig.valueFormatter(item) : item.value + mergedConfig.unit }}</div>
+        <div class="ranking-value">{{ item.value + mergedConfig.unit }}</div>
       </div>
 
       <div class="ranking-column">
@@ -82,13 +82,7 @@ export default {
          * @type {Boolean}
          * @default sort = true
          */
-        sort: true,
-        /**
-         * @description Value formatter
-         * @type {Function}
-         * @default valueFormatter = null
-         */
-        valueFormatter: null
+        sort: true
       },
 
       mergedConfig: null,
@@ -158,20 +152,10 @@ export default {
       })
 
       const value = data.map(({ value }) => value)
-      
-      const min = Math.min(...value) || 0
-
-      // abs of min
-      const minAbs = Math.abs(min)
 
       const max = Math.max(...value) || 0
 
-      // abs of max
-      const maxAbs = Math.abs(max)
-
-      const total = max + minAbs
-
-      data = data.map((row, i) => ({ ...row, ranking: i + 1, percent: (row.value + minAbs) / total * 100 }))
+      data = data.map((row, i) => ({ ...row, ranking: i + 1, percent: row.value / max * 100 }))
 
       const rowLength = data.length
 
@@ -214,7 +198,7 @@ export default {
       let rows = rowsData.slice(animationIndex)
       rows.push(...rowsData.slice(0, animationIndex))
 
-      this.rows = rows.slice(0, rowNum + 1)
+      this.rows = rows
       this.heights = new Array(rowLength).fill(avgHeight)
 
       await new Promise(resolve => setTimeout(resolve, 300))
@@ -238,7 +222,7 @@ export default {
       if (!animationHandler) return
 
       clearTimeout(animationHandler)
-    },
+    }
   },
   destroyed () {
     const { stopAnimation } = this

@@ -1,10 +1,6 @@
 <template>
   <div class="dv-border-box-5" :ref="ref">
-    <svg :class="`dv-border-svg-container  ${reverse && 'dv-reverse'}`" :width="width" :height="height">
-      <polygon :fill="backgroundColor" :points="`
-        10, 22 ${width - 22}, 22 ${width - 22}, ${height - 86} ${width - 84}, ${height - 24} 10, ${height - 24}
-      `" />
-
+    <svg :class="`dv-svg-container  ${reverse && 'dv-reverse'}`" :width="width" :height="height">
       <polyline
         class="dv-bb5-line-1"
         :stroke="mergedColor[0]"
@@ -47,10 +43,6 @@ export default {
     reverse: {
       type: Boolean,
       default: false
-    },
-    backgroundColor: {
-      type: String,
-      default: 'transparent'
     }
   },
   data () {
@@ -94,14 +86,14 @@ export default {
     transform: rotate(180deg);
   }
 
-  .dv-border-svg-container {
+  .dv-svg-container {
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
 
-    & > polyline {
+    polyline {
       fill: none;
     }
   }

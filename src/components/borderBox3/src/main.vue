@@ -1,10 +1,6 @@
 <template>
   <div class="dv-border-box-3" :ref="ref">
     <svg class="dv-border-svg-container" :width="width" :height="height">
-      <polygon :fill="backgroundColor" :points="`
-        23, 23 ${width - 24}, 23 ${width - 24}, ${height - 24} 23, ${height - 24}
-      `" />
-
       <polyline class="dv-bb3-line1"
         :stroke="mergedColor[0]"
         :points="`4, 4 ${width - 22} ,4 ${width - 22}, ${height - 22} 4, ${height - 22} 4, 4`"
@@ -43,10 +39,6 @@ export default {
     color: {
       type: Array,
       default: () => ([])
-    },
-    backgroundColor: {
-      type: String,
-      default: 'transparent'
     }
   },
   data () {
@@ -93,7 +85,7 @@ export default {
     top: 0px;
     left: 0px;
 
-    & > polyline {
+    polyline {
       fill: none;
     }
   }

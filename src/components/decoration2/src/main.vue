@@ -6,7 +6,7 @@
           :attributeName="reverse ? 'height' : 'width'"
           from="0"
           :to="reverse ? height : width"
-          :dur="`${dur}s`"
+          dur="6s"
           calcMode="spline"
           keyTimes="0;1"
           keySplines=".42,0,.58,1"
@@ -19,7 +19,7 @@
           :attributeName="reverse ? 'y' : 'x'"
           from="0"
           :to="reverse ? height : width"
-          :dur="`${dur}s`"
+          dur="6s"
           calcMode="spline"
           keyTimes="0;1"
           keySplines="0.42,0,0.58,1"
@@ -48,10 +48,6 @@ export default {
     reverse: {
       type: Boolean,
       default: false
-    },
-    dur: {
-      type: Number,
-      default: 6
     }
   },
   data () {

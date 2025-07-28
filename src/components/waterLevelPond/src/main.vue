@@ -10,6 +10,7 @@
       </defs>
 
       <text
+        v-if="renderer"
         :stroke="`url(#${gradientId})`"
         :fill="`url(#${gradientId})`"
         :x="renderer.area[0] / 2 + 8"
@@ -39,8 +40,6 @@
 </template>
 
 <script>
-import { uuid } from '../../../util/index'
-
 import { deepMerge } from '@jiaminghi/charts/lib/util/index'
 
 import { deepClone } from '@jiaminghi/c-render/lib/plugin/util'
@@ -54,9 +53,9 @@ export default {
     default: () => ({})
   },
   data () {
-    const id = uuid()
+    const timestamp = Date.now()
     return {
-      gradientId: `water-level-pond-${id}`,
+      gradientId: `water-level-pond-${timestamp}`,
 
       defaultConfig: {
         /**

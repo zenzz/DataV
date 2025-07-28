@@ -7,23 +7,16 @@
       </div>
 
       <div class="capsule-container">
-        <div class="capsule-item" v-for="(capsule, index) in capsuleLength" :key="index">
-          <div
-            class="capsule-item-column"
-            :style="`width: ${capsule * 100}%; background-color: ${mergedConfig.colors[index % mergedConfig.colors.length]};`"
-          >
-            <div
-              v-if="mergedConfig.showValue"
-              class="capsule-item-value"
-            >{{ capsuleValue[index] }}</div>
-          </div>
+        <div
+          class="capsule-item"
+          v-for="(capsule, index) in capsuleLength"
+          :key="index"
+        >
+          <div :style="`width: ${capsule * 100}%; background-color: ${mergedConfig.colors[index % mergedConfig.colors.length]};`"></div>
         </div>
 
         <div class="unit-label">
-          <div
-            v-for="(label, index) in labelData"
-            :key="label + index"
-          >{{ label }}</div>
+          <div v-for="(label, index) in labelData" :key="label + index">{{ label }}</div>
         </div>
       </div>
 
@@ -45,7 +38,7 @@ export default {
       default: () => ({})
     }
   },
-  data() {
+  data () {
     return {
       defaultConfig: {
         /**
@@ -61,61 +54,42 @@ export default {
          * @default color = ['#37a2da', '#32c5e9', '#67e0e3', '#9fe6b8', '#ffdb5c', '#ff9f7f', '#fb7293']
          * @example color = ['#000', 'rgb(0, 0, 0)', 'rgba(0, 0, 0, 1)', 'red']
          */
-        colors: [
-          '#37a2da',
-          '#32c5e9',
-          '#67e0e3',
-          '#9fe6b8',
-          '#ffdb5c',
-          '#ff9f7f',
-          '#fb7293'
-        ],
+        colors: ['#37a2da', '#32c5e9', '#67e0e3', '#9fe6b8', '#ffdb5c', '#ff9f7f', '#fb7293'],
         /**
          * @description Chart unit
          * @type {String}
          * @default unit = ''
          */
-        unit: '',
-        /**
-         * @description Show item value
-         * @type {Boolean}
-         * @default showValue = false
-         */
-        showValue: false
+        unit: ''
       },
 
       mergedConfig: null,
 
       capsuleLength: [],
-      capsuleValue: [],
-      labelData: [],
-      labelDataLength: []
+      labelData: []
     }
   },
   watch: {
-    config() {
+    config () {
       const { calcData } = this
 
       calcData()
     }
   },
   methods: {
-    calcData() {
+    calcData () {
       const { mergeConfig, calcCapsuleLengthAndLabelData } = this
 
       mergeConfig()
 
       calcCapsuleLengthAndLabelData()
     },
-    mergeConfig() {
+    mergeConfig () {
       let { config, defaultConfig } = this
 
-      this.mergedConfig = deepMerge(
-        deepClone(defaultConfig, true),
-        config || {}
-      )
+      this.mergedConfig = deepMerge(deepClone(defaultConfig, true), config || {})
     },
-    calcCapsuleLengthAndLabelData() {
+    calcCapsuleLengthAndLabelData () {
       const { data } = this.mergedConfig
 
       if (!data.length) return
@@ -124,24 +98,14 @@ export default {
 
       const maxValue = Math.max(...capsuleValue)
 
-      this.capsuleValue = capsuleValue
-
-      this.capsuleLength = capsuleValue.map(v => (maxValue ? v / maxValue : 0))
+      this.capsuleLength = capsuleValue.map(v => maxValue ? v / maxValue : 0)
 
       const oneFifth = maxValue / 5
 
-      const labelData = Array.from(
-        new Set(new Array(6).fill(0).map((v, i) => Math.ceil(i * oneFifth)))
-      )
-
-      this.labelData = labelData
-
-      this.labelDataLength = Array.from(labelData).map(v =>
-        maxValue ? v / maxValue : 0
-      )
+      this.labelData = new Array(6).fill(0).map((v, i) => Math.ceil(i * oneFifth))
     }
   },
-  mounted() {
+  mounted () {
     const { calcData } = this
 
     calcData()

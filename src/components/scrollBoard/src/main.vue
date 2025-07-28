@@ -4,7 +4,7 @@
       <div
         class="header-item"
         v-for="(headerItem, i) in header"
-        :key="`${headerItem}${i}`"
+        :key="headerItem + i"
         :style="`
           height: ${mergedConfig.headerHeight}px;
           line-height: ${mergedConfig.headerHeight}px;
@@ -23,7 +23,7 @@
       <div
         class="row-item"
         v-for="(row, ri) in rows"
-        :key="`${row.toString()}${row.scroll}`"
+        :key="row.toString() + row.scroll"
         :style="`
           height: ${heights[ri]}px;
           line-height: ${heights[ri]}px;
@@ -33,13 +33,11 @@
         <div
           class="ceil"
           v-for="(ceil, ci) in row.ceils"
-          :key="`${ceil}${ri}${ci}`"
+          :key="ceil + ri + ci"
           :style="`width: ${widths[ci]}px;`"
           :align="aligns[ci]"
           v-html="ceil"
-          @click="emitEvent('click', ri, ci, row, ceil)"
-          @mouseenter="handleHover(true, ri, ci, row, ceil)"
-          @mouseleave="handleHover(false)"
+          @click="emitEvent(ri, ci, row, ceil)"
         />
 
       </div>
@@ -148,14 +146,7 @@ export default {
          * @default carousel = 'single'
          * @example carousel = 'single' | 'page'
          */
-        carousel: 'single',
-        /**
-         * @description Pause scroll when mouse hovered
-         * @type {Boolean}
-         * @default hoverPause = true
-         * @example hoverPause = true | false
-         */
-        hoverPause: true
+        carousel: 'single'
       },
 
       mergedConfig: null,
@@ -178,9 +169,7 @@ export default {
 
       animationHandler: '',
 
-      updater: 0,
-
-      needCalc: false
+      updater: 0
     }
   },
   watch: {
@@ -189,24 +178,10 @@ export default {
 
       stopAnimation()
 
-      this.animationIndex = 0
-
       calcData()
     }
   },
   methods: {
-    handleHover(enter, ri, ci, row, ceil){
-      const { mergedConfig, emitEvent, stopAnimation, animation } = this
-
-      if (enter) emitEvent('mouseover', ri, ci, row, ceil)
-      if (!mergedConfig.hoverPause) return
-
-      if (enter) {
-        stopAnimation()
-      } else {
-        animation(true)
-      }
-    },
     afterAutoResizeMixinInit () {
       const { calcData } = this
 
@@ -337,14 +312,6 @@ export default {
       this.aligns = deepMerge(aligns, align)
     },
     async animation (start = false) {
-      const { needCalc, calcHeights, calcRowsData } = this
-
-      if (needCalc) {
-        calcRowsData()
-        calcHeights()
-        this.needCalc = false
-      }
-
       let { avgHeight, animationIndex, mergedConfig, rowsData, animation, updater } = this
 
       const { waitTime, carousel, rowNum } = mergedConfig
@@ -363,7 +330,7 @@ export default {
       let rows = rowsData.slice(animationIndex)
       rows.push(...rowsData.slice(0, animationIndex))
 
-      this.rows = rows.slice(0, carousel === 'page' ? rowNum * 2 : rowNum + 1)
+      this.rows = rows
       this.heights = new Array(rowLength).fill(avgHeight)
 
       await new Promise(resolve => setTimeout(resolve, 300))
@@ -388,28 +355,15 @@ export default {
 
       clearTimeout(animationHandler)
     },
-    emitEvent (type, ri, ci, row, ceil) {
+    emitEvent (ri, ci, row, ceil) {
       const { ceils, rowIndex } = row
 
-      this.$emit(type, {
+      this.$emit('click', {
         row: ceils,
         ceil,
         rowIndex,
         columnIndex: ci
       })
-    },
-    updateRows(rows, animationIndex) {
-      const { mergedConfig, animationHandler, animation } = this
-
-      this.mergedConfig = {
-        ...mergedConfig,
-        data: [...rows]
-      }
-
-      this.needCalc = true
-
-      if (typeof animationIndex === 'number') this.animationIndex = animationIndex
-      if (!animationHandler) animation(true)
     }
   },
   destroyed () {
